@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# Damn Vulnerable Web Services, dvws-node (by snoopysecurity and contributors) as an Isoloom
+# spec: the upstream source, vendored unchanged in build/web/app/, built by its Dockerfile with
+# the database hosts baked in, plus the MongoDB and MySQL servers of upstream's compose file.
+# `isoloom generate`, then `isoloom up docker`.
+version: 1
+name: dvws-node
+
+networks:
+  lab: { cidr: 10.60.9.0/24, internet: false }
+
+machines:
+  mongo:
+    networks: { lab: 20 }
+    services: [{ port: 27017, name: mongodb }]
+    docker:
+      image: "mongo:4.0.4"
+
+  mysql:
+    networks: { lab: 21 }
+    services: [{ port: 3306, name: mysql }]
+    resources: { cpus: 1, memory_mb: 512 }
+    docker:
+      build: build/mysql
+
+  web:
+    networks: { lab: 10 }
+    services: [{ port: 80, name: web, http: true, publish: 80 }]
+    depends_on: [mongo, mysql]
+    resources: { cpus: 1, memory_mb: 1024 }
+    docker:
+      build: build/web
+
+checks:
+  - name: the site answers
+    http: http://web/
+    wait: 180
+  - name: the API documentation answers
+    http: http://web/api-docs/
+  - name: the SOAP service publishes its WSDL
+    http: http://web/dvwsuserservice?wsdl
+  - name: the seeded test user logs in
+    script: checks/login.sh
+
+message: |
+  DVWS answers at http://localhost:{{ machines.web.services.0.publish }}/ (REST API under /api,
+  SOAP at /dvwsuserservice, XML-RPC at /xmlrpc, GraphQL at /graphql, API docs at /api-docs).
+  Log in as test / test; the vulnerabilities are listed in build/web/app/CHALLENGES.md.
