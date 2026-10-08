@@ -16,7 +16,7 @@ upstream source in [`build/web/app/`](build/web/app) builds with its own Dockerf
 
 ```bash
 isoloom generate
-isoloom up docker
+isoloom run docker
 ```
 
 Then open http://localhost/ and log in as `test` / `test` (or `admin` / `letmein`). The same spec
