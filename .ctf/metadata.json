@@ -4,6 +4,5 @@
   "question": "Exploit the API and web service vulnerabilities listed in the lab guide.",
   "category": "WEB",
   "difficulty": 3,
-  "evidence_kind": "SECRET",
-  "capabilities": ["api-security", "xml-external-entity", "nosql-injection", "sql-injection", "jwt-attacks", "graphql-security"]
+  "evidence_kind": "SECRET"
 }
