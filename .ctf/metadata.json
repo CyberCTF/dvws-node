@@ -1,7 +1,7 @@
 {
   "title": "DVWS-node",
   "description": "Damn Vulnerable Web Services: a Node.js application with REST, SOAP, XML-RPC and GraphQL interfaces backed by MongoDB and MySQL, covering more than 30 API and web service flaws such as XXE, NoSQL and SQL injection, JWT weaknesses, SSRF and insecure deserialization.",
-  "question": "Exploit the API and web service vulnerabilities listed in the lab guide.",
+  "question": "Use the API's OS command injection (or a file read such as XXE) to read /ctf/flag on the server.",
   "category": "WEB",
   "difficulty": 3,
   "evidence_kind": "SECRET"

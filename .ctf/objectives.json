@@ -1,0 +1,35 @@
+{
+  "objectives": [
+    {
+      "key": "main",
+      "title": "Read the flag",
+      "prompt": "Log in to DVWS, find an API endpoint that runs a system command with your input (or reads files for you), and read /ctf/flag on the server.",
+      "check": { "evidence": "SECRET", "format": "FLAG{%s}" },
+      "dev": "FLAG{dev-dvws-node}",
+      "hints": [
+        "The API documentation at /api-docs lists a system information endpoint under /api/v2.",
+        "That endpoint hands a path segment to a Node.js function that spawns a shell. XXE in the SOAP service is another way to read a file."
+      ],
+      "steps": [
+        {
+          "key": "endpoint",
+          "title": "Find the endpoint",
+          "prompt": "Which API v2 endpoint returns system information by running a command? (the path segment after /api/v2/)",
+          "check": { "answer": ["sysinfo", "/api/v2/sysinfo", "sysinfo/:command"] }
+        },
+        {
+          "key": "sink",
+          "title": "Find the sink",
+          "prompt": "Which Node.js child_process function receives that value?",
+          "check": { "answer": ["exec", "child_process.exec", "exec()"] }
+        },
+        {
+          "key": "class",
+          "title": "Name the flaw",
+          "prompt": "Which vulnerability class lets a second command of yours run on the server?",
+          "check": { "answer": ["command injection", "os command injection", "shell injection"] }
+        }
+      ]
+    }
+  ]
+}
